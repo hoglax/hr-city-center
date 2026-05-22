@@ -1,0 +1,1417 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Сити Старт — Корпоративная платформа для обучения сотрудников</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    colors: {
+                        brand: {
+                            dark: '#090e1a',
+                            navy: '#0f172a',
+                            gold: '#c5a880',
+                            goldDark: '#a18258',
+                            light: '#f8fafc',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom premium scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #c5a880;
+            border-radius: 3px;
+        }
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(197, 168, 128, 0.15);
+        }
+        .text-gold-gradient {
+            background: linear-gradient(135deg, #c5a880 0%, #f3e8ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body class="bg-[#090e1a] text-slate-100 min-h-screen font-sans flex flex-col md:flex-row overflow-x-hidden">
+
+    <!-- SIDEBAR NAVIGATION -->
+    <aside class="w-full md:w-80 bg-[#070b14] border-r border-slate-800 flex flex-col justify-between shrink-0">
+        <div>
+            <!-- Header/Logo -->
+            <div class="p-6 border-b border-slate-800 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-gradient-to-tr from-brand-goldDark to-brand-gold flex items-center justify-center shadow-lg shadow-brand-gold/10">
+                        <i class="fa-solid fa-hotel text-brand-dark text-xl font-bold"></i>
+                    </div>
+                    <div>
+                        <span class="font-serif text-xl font-bold tracking-tight text-white">СИТИ <span class="text-brand-gold">СТАРТ</span></span>
+                        <p class="text-[10px] text-brand-gold uppercase tracking-widest font-semibold">AI LMS Platform</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Student Profile Summary -->
+            <div class="p-6 bg-[#0c1222] border-b border-slate-800/60">
+                <div class="flex items-center gap-4">
+                    <div class="relative">
+                        <img id="student-avatar" src="https://placehold.co/150x150/1e293b/c5a880?text=Брокер" alt="Аватар стажера" class="w-12 h-12 rounded-full border-2 border-brand-gold object-cover">
+                        <div class="absolute -bottom-1 -right-1 bg-green-500 w-3.5 h-3.5 rounded-full border-2 border-[#090e1a]"></div>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-sm text-white">Никита Лебедев</h4>
+                        <p class="text-xs text-brand-gold font-medium flex items-center gap-1">
+                            <i class="fa-solid fa-crown text-[10px]"></i> Стажер (Уровень 2)
+                        </p>
+                    </div>
+                </div>
+                <!-- XP Tracker -->
+                <div class="mt-4">
+                    <div class="flex justify-between text-xs mb-1">
+                        <span class="text-slate-400">Прогресс адаптации</span>
+                        <span class="font-semibold text-brand-gold" id="xp-counter">64% (3200 XP)</span>
+                    </div>
+                    <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                        <div id="xp-progress-bar" class="bg-gradient-to-r from-brand-goldDark to-brand-gold h-1.5 rounded-full transition-all duration-500" style="width: 64%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Menu List -->
+            <nav class="p-4 space-y-1.5">
+                <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all text-white bg-slate-800/45 border-l-2 border-brand-gold">
+                    <i class="fa-solid fa-chart-line text-brand-gold w-5"></i>
+                    Личный кабинет
+                </button>
+                <button onclick="switchTab('courses')" id="nav-courses" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all text-slate-400 hover:text-white hover:bg-slate-800/30">
+                    <i class="fa-solid fa-graduation-cap w-5"></i>
+                    Обучающий блок
+                </button>
+                <button onclick="switchTab('simulator')" id="nav-simulator" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all text-slate-400 hover:text-white hover:bg-slate-800/30">
+                    <i class="fa-solid fa-phone-volume w-5 text-green-400 animate-pulse"></i>
+                    AI-Симулятор звонков
+                </button>
+                <button onclick="switchTab('analyzer')" id="nav-analyzer" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all text-slate-400 hover:text-white hover:bg-slate-800/30">
+                    <i class="fa-solid fa-magnifying-glass-chart w-5"></i>
+                    AI-Анализ объектов
+                </button>
+                <button onclick="switchTab('assistant')" id="nav-assistant" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all text-slate-400 hover:text-white hover:bg-slate-800/30">
+                    <i class="fa-solid fa-robot w-5"></i>
+                    AI-Ассистент
+                </button>
+                <button onclick="switchTab('leaderboard')" id="nav-leaderboard" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all text-slate-400 hover:text-white hover:bg-slate-800/30">
+                    <i class="fa-solid fa-ranking-star w-5"></i>
+                    Рейтинг и Награды
+                </button>
+                <button onclick="switchTab('supervisor')" id="nav-supervisor" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all text-slate-400 hover:text-white hover:bg-slate-800/30">
+                    <i class="fa-solid fa-user-tie w-5"></i>
+                    Панель наставника
+                </button>
+            </nav>
+        </div>
+
+        <!-- Sidebar footer -->
+        <div class="p-4 border-t border-slate-800/60 bg-[#05080f] text-xs text-slate-500 space-y-2">
+            <div class="flex justify-between items-center">
+                <span>Интеграция CRM:</span>
+                <span class="flex items-center gap-1.5 text-green-400 font-semibold">
+                    <span class="w-2 h-2 rounded-full bg-green-500 inline-block animate-ping"></span> Активна
+                </span>
+            </div>
+            <div class="flex justify-between items-center">
+                <span>API Шлюз Gemini:</span>
+                <span class="text-brand-gold font-semibold">Авторежим</span>
+            </div>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT WRAPPER -->
+    <main class="flex-1 flex flex-col min-w-0 bg-[#090e1a] relative">
+        <!-- TOP HEADER -->
+        <header class="h-20 border-b border-slate-800/80 px-8 flex items-center justify-between bg-[#080d17]/85 backdrop-blur-md sticky top-0 z-40 shrink-0">
+            <div class="flex items-center gap-4">
+                <h2 id="page-title" class="text-xl font-semibold text-white">Личный кабинет стажера</h2>
+            </div>
+
+            <!-- API Status & Quick Actions -->
+            <div class="flex items-center gap-6">
+                <!-- Notifications -->
+                <div class="relative cursor-pointer hover:text-white text-slate-400 transition">
+                    <i class="fa-regular fa-bell text-lg"></i>
+                    <span class="absolute -top-1.5 -right-1.5 bg-brand-gold text-brand-dark text-[10px] font-bold px-1.5 py-0.5 rounded-full">3</span>
+                </div>
+                
+                <!-- Quick Metric Badge -->
+                <div class="hidden sm:flex items-center gap-2 bg-[#101827] border border-slate-800 px-3 py-1.5 rounded-lg text-xs">
+                    <i class="fa-solid fa-bolt text-brand-gold"></i>
+                    <span class="text-slate-400">Набрано сегодня:</span>
+                    <span class="font-bold text-white text-brand-gold" id="today-xp">+150 XP</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dynamic Content Body Container -->
+        <div id="content-container" class="p-8 flex-1 overflow-y-auto max-w-7xl w-full mx-auto">
+            
+            <!-- TAB 1: DASHBOARD -->
+            <section id="tab-dashboard" class="space-y-8">
+                <!-- Greeting card -->
+                <div class="relative rounded-2xl overflow-hidden bg-gradient-to-r from-[#10182d] to-[#1e293b] p-8 border border-slate-800 shadow-xl">
+                    <div class="absolute -right-20 -bottom-20 w-80 h-80 rounded-full bg-brand-gold/5 blur-3xl pointer-events-none"></div>
+                    <div class="max-w-2xl">
+                        <span class="text-xs font-bold text-brand-gold uppercase tracking-widest bg-brand-gold/10 px-3 py-1 rounded-full">Онбординг трек</span>
+                        <h1 class="text-3xl font-serif font-bold text-white mt-3">Добро пожаловать в Сити Старт, Никита!</h1>
+                        <p class="text-slate-400 mt-2 text-sm leading-relaxed">
+                            Вы успешно прошли адаптационный модуль и основы новостроек. Сегодня ваша цель — закончить практический симулятор звонков для получения допуска к следующему блоку обучения.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Metrics Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                    <div class="glass-panel rounded-xl p-5 flex flex-col justify-between">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-xs text-slate-400 uppercase tracking-wider font-semibold">Средний балл</p>
+                                <h3 class="text-3xl font-bold text-white mt-1">92%</h3>
+                            </div>
+                            <span class="p-3 bg-brand-gold/10 text-brand-gold rounded-lg"><i class="fa-solid fa-percentage text-lg"></i></span>
+                        </div>
+                        <p class="text-[11px] text-green-400 mt-3"><i class="fa-solid fa-circle-check"></i> Выше минимального порога (80%)</p>
+                    </div>
+
+                    <div class="glass-panel rounded-xl p-5 flex flex-col justify-between">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-xs text-slate-400 uppercase tracking-wider font-semibold">Пройдено лекций</p>
+                                <h3 class="text-3xl font-bold text-white mt-1">12 / 18</h3>
+                            </div>
+                            <span class="p-3 bg-blue-500/10 text-blue-400 rounded-lg"><i class="fa-solid fa-book-open text-lg"></i></span>
+                        </div>
+                        <p class="text-[11px] text-slate-400 mt-3">Следующий урок: <span class="text-brand-gold font-medium">Модуль 3: Вторичка</span></p>
+                    </div>
+
+                    <div class="glass-panel rounded-xl p-5 flex flex-col justify-between">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-xs text-slate-400 uppercase tracking-wider font-semibold">AI Практикумы</p>
+                                <h3 class="text-3xl font-bold text-white mt-1">4 / 5</h3>
+                            </div>
+                            <span class="p-3 bg-green-500/10 text-green-400 rounded-lg"><i class="fa-solid fa-robot text-lg"></i></span>
+                        </div>
+                        <p class="text-[11px] text-brand-gold mt-3 font-medium cursor-pointer hover:underline" onclick="switchTab('simulator')"><i class="fa-solid fa-play"></i> Пройти 1 симуляцию звонка</p>
+                    </div>
+
+                    <div class="glass-panel rounded-xl p-5 flex flex-col justify-between">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-xs text-slate-400 uppercase tracking-wider font-semibold">Место в рейтинге</p>
+                                <h3 class="text-3xl font-bold text-white mt-1" id="student-rank">#4</h3>
+                            </div>
+                            <span class="p-3 bg-purple-500/10 text-purple-400 rounded-lg"><i class="fa-solid fa-trophy text-lg"></i></span>
+                        </div>
+                        <p class="text-[11px] text-slate-400 mt-3">До топ-3 осталось <span class="text-brand-gold font-semibold">150 XP</span></p>
+                    </div>
+                </div>
+
+                <!-- Tasks, Deadlines & Calendar -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- Daily checklist -->
+                    <div class="lg:col-span-2 glass-panel rounded-xl p-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="font-serif text-lg font-bold text-white flex items-center gap-2">
+                                <i class="fa-solid fa-list-check text-brand-gold"></i> План на сегодня
+                            </h3>
+                            <span class="text-xs text-slate-400">Четверг, 2026 г.</span>
+                        </div>
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between p-4 bg-[#11192e] rounded-lg border border-slate-800/60">
+                                <div class="flex items-center gap-3">
+                                    <input type="checkbox" checked disabled class="w-4 h-4 text-brand-gold bg-slate-800 border-slate-700 rounded focus:ring-brand-gold">
+                                    <div>
+                                        <h4 class="text-sm font-semibold text-slate-300 line-through">Посмотреть лекцию №4 "Юридическая чистота сделки"</h4>
+                                        <p class="text-xs text-slate-500">Модуль 3: Вторичная недвижимость</p>
+                                    </div>
+                                </div>
+                                <span class="text-xs bg-slate-800 text-slate-400 px-2 py-1 rounded">+100 XP</span>
+                            </div>
+
+                            <div class="flex items-center justify-between p-4 bg-[#11192e] rounded-lg border border-slate-800">
+                                <div class="flex items-center gap-3">
+                                    <input type="checkbox" id="task-sip" class="w-4 h-4 text-brand-gold bg-slate-800 border-slate-700 rounded focus:ring-brand-gold cursor-pointer" onchange="completeTask('task-sip', 150)">
+                                    <div>
+                                        <h4 class="text-sm font-semibold text-white">Пройти ролевой звонок с AI-клиентом Ириной</h4>
+                                        <p class="text-xs text-brand-gold font-medium">AI Симулятор возражений</p>
+                                    </div>
+                                </div>
+                                <span class="text-xs bg-brand-gold/10 text-brand-gold px-2 py-1 rounded font-semibold">+150 XP</span>
+                            </div>
+
+                            <div class="flex items-center justify-between p-4 bg-[#11192e] rounded-lg border border-slate-800/60">
+                                <div class="flex items-center gap-3">
+                                    <input type="checkbox" id="task-anal" class="w-4 h-4 text-brand-gold bg-slate-800 border-slate-700 rounded focus:ring-brand-gold cursor-pointer" onchange="completeTask('task-anal', 100)">
+                                    <div>
+                                        <h4 class="text-sm font-semibold text-white">Проанализировать новостройку ЖК "Ривьера"</h4>
+                                        <p class="text-xs text-slate-400">AI Модуль анализа объектов</p>
+                                    </div>
+                                </div>
+                                <span class="text-xs bg-brand-gold/10 text-brand-gold px-2 py-1 rounded font-semibold">+100 XP</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Badges list -->
+                    <div class="glass-panel rounded-xl p-6">
+                        <h3 class="font-serif text-lg font-bold text-white flex items-center gap-2 mb-6">
+                            <i class="fa-solid fa-award text-brand-gold"></i> Достижения
+                        </h3>
+                        <div class="space-y-4">
+                            <div class="flex items-center gap-4 p-3 bg-slate-800/30 rounded-lg">
+                                <div class="w-12 h-12 rounded-lg bg-gradient-to-tr from-yellow-500 to-amber-300 flex items-center justify-center text-xl shadow-lg">🏆</div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-white">Лучший звонок недели</h4>
+                                    <p class="text-xs text-slate-400">Оценка наставника 5.0 за диалог</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-4 p-3 bg-slate-800/30 rounded-lg">
+                                <div class="w-12 h-12 rounded-lg bg-gradient-to-tr from-rose-500 to-orange-400 flex items-center justify-center text-xl shadow-lg">🔥</div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-white">Самый активный</h4>
+                                    <p class="text-xs text-slate-400">5 дней подряд в системе</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-4 p-3 bg-slate-800/30 rounded-lg">
+                                <div class="w-12 h-12 rounded-lg bg-gradient-to-tr from-cyan-500 to-blue-400 flex items-center justify-center text-xl shadow-lg">🎯</div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-white">Идеальный тест</h4>
+                                    <p class="text-xs text-slate-400">100% правильных ответов</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 2: COURSES -->
+            <section id="tab-courses" class="hidden space-y-8">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                        <h1 class="text-2xl font-serif font-bold text-white">Программа Академии Сити Старт</h1>
+                        <p class="text-slate-400 text-sm mt-1">Изучайте теорию, скачивайте материалы и проходите AI-тестирование.</p>
+                    </div>
+                    <span class="text-xs bg-brand-gold/10 text-brand-gold font-bold px-4 py-2 rounded-full border border-brand-gold/30">Всего модулей: 5</span>
+                </div>
+
+                <!-- Learning Modules Grid -->
+                <div class="space-y-6">
+                    <!-- Module 1 -->
+                    <div class="glass-panel rounded-xl overflow-hidden border border-slate-800">
+                        <div class="p-6 bg-[#0e1628] flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                            <div>
+                                <span class="text-[10px] font-bold text-emerald-400 uppercase tracking-widest bg-emerald-500/10 px-2 py-0.5 rounded">Пройден</span>
+                                <h3 class="text-xl font-bold text-white mt-1.5">Модуль 1: Адаптация и бренд</h3>
+                                <p class="text-sm text-slate-400 mt-1">История Сити Старт, регламенты, корпоративные ценности, работа с внутренней базой.</p>
+                            </div>
+                            <span class="text-sm text-emerald-400 font-semibold"><i class="fa-solid fa-circle-check"></i> Сдан (95% за тест)</span>
+                        </div>
+                    </div>
+
+                    <!-- Module 2 -->
+                    <div class="glass-panel rounded-xl overflow-hidden border border-slate-800">
+                        <div class="p-6 bg-[#0e1628] flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                            <div>
+                                <span class="text-[10px] font-bold text-emerald-400 uppercase tracking-widest bg-emerald-500/10 px-2 py-0.5 rounded">Пройден</span>
+                                <h3 class="text-xl font-bold text-white mt-1.5">Модуль 2: Рыночная аналитика новостроек</h3>
+                                <p class="text-sm text-slate-400 mt-1">Классификация жилья, специфика работы с девелоперами, разбор скрипта подбора.</p>
+                            </div>
+                            <span class="text-sm text-emerald-400 font-semibold"><i class="fa-solid fa-circle-check"></i> Сдан (88% за тест)</span>
+                        </div>
+                    </div>
+
+                    <!-- Module 3 (Active) -->
+                    <div class="glass-panel rounded-xl overflow-hidden border border-brand-gold/30 ring-1 ring-brand-gold/20 shadow-lg shadow-brand-gold/5">
+                        <div class="p-6 bg-[#111c34] flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-slate-800/80">
+                            <div>
+                                <span class="text-[10px] font-bold text-brand-gold uppercase tracking-widest bg-brand-gold/10 px-2 py-0.5 rounded">Изучается сейчас</span>
+                                <h3 class="text-xl font-bold text-white mt-1.5">Модуль 3: Вторичный рынок и сделки</h3>
+                                <p class="text-sm text-slate-400 mt-1">Юридический дью-дилидженс недвижимости, структура сложной цепочки, работа с обременениями.</p>
+                            </div>
+                            <button onclick="toggleLessons('mod-3-lessons')" class="bg-brand-gold text-brand-dark px-4 py-2 rounded-lg text-xs font-bold hover:bg-brand-goldDark transition flex items-center gap-1">
+                                <i class="fa-solid fa-list"></i> Развернуть уроки
+                            </button>
+                        </div>
+                        
+                        <!-- Lessons Container -->
+                        <div id="mod-3-lessons" class="p-6 space-y-4 bg-[#090e1a]">
+                            <!-- Lesson 1 -->
+                            <div class="p-4 bg-slate-800/30 rounded-lg border border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                                <div class="flex items-center gap-3">
+                                    <span class="w-8 h-8 rounded-full bg-brand-gold/10 text-brand-gold flex items-center justify-center font-bold text-xs">1</span>
+                                    <div>
+                                        <h4 class="text-sm font-bold text-white">Проверка документов собственника</h4>
+                                        <p class="text-xs text-slate-400">Хронометраж: 20 мин • PDF Руководство • Чек-лист проверки</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <a href="#" class="p-2 hover:bg-slate-700 rounded text-slate-400 hover:text-white text-xs flex items-center gap-1" title="Скачать PDF чек-лист"><i class="fa-solid fa-file-pdf"></i> PDF</a>
+                                    <span class="text-xs bg-emerald-500/10 text-emerald-400 px-2.5 py-1 rounded font-semibold"><i class="fa-solid fa-circle-check"></i> Завершено</span>
+                                </div>
+                            </div>
+
+                            <!-- Lesson 2 -->
+                            <div class="p-4 bg-slate-800/30 rounded-lg border border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                                <div class="flex items-center gap-3">
+                                    <span class="w-8 h-8 rounded-full bg-brand-gold/10 text-brand-gold flex items-center justify-center font-bold text-xs">2</span>
+                                    <div>
+                                        <h4 class="text-sm font-bold text-white">Юридическая проверка чистоты квартиры</h4>
+                                        <p class="text-xs text-slate-400">Хронометраж: 45 мин • Обучающий вебинар • Презентация наставника</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <a href="#" class="p-2 hover:bg-slate-700 rounded text-slate-400 hover:text-white text-xs flex items-center gap-1" title="Открыть презентацию"><i class="fa-solid fa-file-powerpoint"></i> PPTX</a>
+                                    <span class="text-xs bg-emerald-500/10 text-emerald-400 px-2.5 py-1 rounded font-semibold"><i class="fa-solid fa-circle-check"></i> Завершено</span>
+                                </div>
+                            </div>
+
+                            <!-- Lesson 3 -->
+                            <div class="p-4 bg-slate-800/60 rounded-lg border border-brand-gold/20 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                                <div class="flex items-center gap-3">
+                                    <span class="w-8 h-8 rounded-full bg-brand-gold text-brand-dark flex items-center justify-center font-bold text-xs">3</span>
+                                    <div>
+                                        <h4 class="text-sm font-bold text-white">Отработка жестких возражений по телефону</h4>
+                                        <p class="text-xs text-slate-400">Тренировка: AI-симулятор звонков • Защитный тест-барьер</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <span class="text-xs bg-brand-gold/10 text-brand-gold px-2.5 py-1 rounded font-semibold">Текущий урок</span>
+                                    <button onclick="switchTab('simulator')" class="bg-brand-gold text-brand-dark px-3 py-1.5 rounded text-xs font-bold hover:bg-brand-goldDark transition">Запустить AI звонок</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Module 4 -->
+                    <div class="glass-panel rounded-xl overflow-hidden border border-slate-800 opacity-60">
+                        <div class="p-6 bg-[#0e1628] flex justify-between items-center gap-4">
+                            <div>
+                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest bg-slate-500/10 px-2 py-0.5 rounded">Заблокирован</span>
+                                <h3 class="text-xl font-bold text-slate-400 mt-1.5">Модуль 4: Практика по договорам</h3>
+                                <p class="text-sm text-slate-500 mt-1">Создание юридического пакета документов для регпалаты, авансовые соглашения.</p>
+                            </div>
+                            <span class="text-sm text-slate-500"><i class="fa-solid fa-lock"></i> Требуется сдача Модуля 3</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 3: AI CALL SIMULATOR -->
+            <section id="tab-simulator" class="hidden space-y-8">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                        <h1 class="text-2xl font-serif font-bold text-white">Интерактивный AI Симулятор Звонков</h1>
+                        <p class="text-slate-400 text-sm mt-1">Нейросеть моделирует поведение жесткого или капризного клиента. Отработайте скрипты продаж и закройте возражения.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- Setup panel / Client list -->
+                    <div class="glass-panel rounded-xl p-6 h-fit space-y-6">
+                        <h3 class="font-serif text-lg font-bold text-white border-b border-slate-800 pb-3">Настройка сценария</h3>
+                        
+                        <!-- Client character selection -->
+                        <div class="space-y-4">
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400">Выберите тип клиента:</label>
+                            
+                            <div onclick="selectPersona('skeptic')" id="persona-skeptic" class="p-4 bg-slate-800/40 border border-brand-gold/60 rounded-lg cursor-pointer hover:bg-slate-800/80 transition-all">
+                                <div class="flex justify-between items-start">
+                                    <h4 class="font-bold text-white text-sm">Игорь (Скептик)</h4>
+                                    <span class="text-[10px] bg-red-500/10 text-red-400 px-2 py-0.5 rounded font-bold">Высокая сложность</span>
+                                </div>
+                                <p class="text-xs text-slate-400 mt-2">Ненавидит агентства. Считает, что все брокеры берут комиссию ни за что. Продает 2-комнатную квартиру на вторичке.</p>
+                            </div>
+
+                            <div onclick="selectPersona('investor')" id="persona-investor" class="p-4 bg-slate-800/20 border border-slate-800 rounded-lg cursor-pointer hover:bg-slate-800/40 transition-all">
+                                <div class="flex justify-between items-start">
+                                    <h4 class="font-bold text-white text-sm">Мария (Инвестор)</h4>
+                                    <span class="text-[10px] bg-yellow-500/10 text-yellow-400 px-2 py-0.5 rounded font-bold">Средняя сложность</span>
+                                </div>
+                                <p class="text-xs text-slate-400 mt-2">Ищет студию под аренду в новостройке. Очень дотошна к цифрам окупаемости и ROI.</p>
+                            </div>
+
+                            <div onclick="selectPersona('family')" id="persona-family" class="p-4 bg-slate-800/20 border border-slate-800 rounded-lg cursor-pointer hover:bg-slate-800/40 transition-all">
+                                <div class="flex justify-between items-start">
+                                    <h4 class="font-bold text-white text-sm">Евгений (Молодая семья)</h4>
+                                    <span class="text-[10px] bg-green-500/10 text-green-400 px-2 py-0.5 rounded font-bold">Легкая сложность</span>
+                                </div>
+                                <p class="text-xs text-slate-400 mt-2">Боится ипотеки. Ищет просторную семейную квартиру, но колеблется между новостройкой и старым жилым фондом.</p>
+                            </div>
+                        </div>
+
+                        <!-- Image Generation Feature using Imagen-4.0 -->
+                        <div class="p-4 bg-slate-900/60 rounded-lg border border-slate-800 space-y-3">
+                            <h4 class="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1">
+                                <i class="fa-solid fa-palette text-brand-gold"></i> AI-Визуализация Клиента (Imagen 4)
+                            </h4>
+                            <p class="text-[11px] text-slate-400">Сгенерируйте фотореалистичный аватар клиента, чтобы видеть с кем ведете переговоры.</p>
+                            <button id="btn-generate-avatar" onclick="generateClientAvatar()" class="w-full bg-slate-800 text-white text-xs font-semibold py-2 rounded border border-slate-700 hover:bg-slate-700 transition flex items-center justify-center gap-1.5">
+                                <span id="avatar-loader" class="hidden"><i class="fa-solid fa-spinner animate-spin"></i></span>
+                                <i class="fa-solid fa-wand-magic-sparkles text-brand-gold"></i> Сгенерировать портрет
+                            </button>
+                            <div id="avatar-preview-container" class="hidden text-center mt-2">
+                                <img id="generated-avatar-img" class="w-24 h-24 rounded-full mx-auto object-cover border-2 border-brand-gold" src="" alt="Клиент">
+                                <span class="text-[9px] text-slate-500 block mt-1">Сгенерировано Imagen 4</span>
+                            </div>
+                        </div>
+
+                        <!-- Action Button -->
+                        <button onclick="startSim()" class="w-full bg-brand-gold text-brand-dark font-bold py-3.5 rounded-lg text-sm hover:bg-brand-goldDark transition shadow-lg shadow-brand-gold/10 flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-phone"></i> Начать симуляцию звонка
+                        </button>
+                    </div>
+
+                    <!-- Simulator Chat UI -->
+                    <div class="lg:col-span-2 flex flex-col glass-panel rounded-xl h-[650px] relative overflow-hidden">
+                        <!-- Simulated Phone Status -->
+                        <div class="p-4 bg-slate-900 border-b border-slate-800 flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <div class="relative">
+                                    <img id="active-sim-avatar" class="w-10 h-10 rounded-full border border-brand-gold" src="https://placehold.co/100x100/1e293b/c5a880?text=👤" alt="Клиент">
+                                    <span class="w-2.5 h-2.5 bg-red-500 rounded-full absolute bottom-0 right-0 border-2 border-[#090e1a]"></span>
+                                </div>
+                                <div>
+                                    <h4 id="sim-client-name" class="font-bold text-sm text-white">Игорь (Скептик)</h4>
+                                    <p class="text-[10px] text-slate-400 flex items-center gap-1">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-red-500 inline-block"></span> Идет запись разговора...
+                                    </p>
+                                </div>
+                            </div>
+                            <!-- Simulation action -->
+                            <button onclick="evaluateSimulation()" id="btn-evaluate" class="hidden bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-bold px-3 py-1.5 rounded transition flex items-center gap-1">
+                                <i class="fa-solid fa-square-check"></i> Завершить и оценить
+                            </button>
+                        </div>
+
+                        <!-- Messages Box -->
+                        <div id="sim-messages" class="flex-1 p-6 overflow-y-auto space-y-4 bg-slate-900/45">
+                            <div class="text-center text-xs text-slate-500 py-10">
+                                <i class="fa-solid fa-headset text-4xl text-slate-700 block mb-3"></i>
+                                Выберите клиента слева и нажмите "Начать симуляцию звонка"
+                            </div>
+                        </div>
+
+                        <!-- Typing input bar -->
+                        <div class="p-4 bg-slate-900 border-t border-slate-800 flex items-center gap-3">
+                            <input id="sim-input" type="text" placeholder="Введите ваш аргумент..." disabled class="flex-1 bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-brand-gold disabled:opacity-50" onkeydown="if(event.key === 'Enter') sendSimMessage()">
+                            <button id="btn-send-sim" onclick="sendSimMessage()" disabled class="p-3 bg-brand-gold hover:bg-brand-goldDark text-brand-dark rounded-lg font-bold transition disabled:opacity-50">
+                                <i class="fa-solid fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Simulation Evaluation Report Modal Area -->
+                <div id="sim-report-card" class="hidden glass-panel rounded-xl p-6 border border-brand-gold/40 shadow-2xl relative overflow-hidden">
+                    <div class="absolute -right-20 -top-20 w-64 h-64 rounded-full bg-emerald-500/5 blur-3xl pointer-events-none"></div>
+                    <div class="flex items-start justify-between border-b border-slate-800 pb-4">
+                        <div>
+                            <span class="text-[10px] bg-emerald-500/10 text-emerald-400 font-bold uppercase tracking-wider px-2.5 py-1 rounded">Анализ звонка готов</span>
+                            <h3 class="text-xl font-bold font-serif text-white mt-1.5">Отчет нейросети об отработке возражения</h3>
+                        </div>
+                        <button onclick="document.getElementById('sim-report-card').classList.add('hidden')" class="text-slate-500 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+                    </div>
+
+                    <div id="report-content" class="grid grid-cols-1 md:grid-cols-4 gap-6 mt-6">
+                        <!-- Score badge -->
+                        <div class="bg-slate-900/60 p-5 rounded-lg text-center flex flex-col justify-center items-center border border-slate-800">
+                            <p class="text-xs text-slate-400 uppercase tracking-widest font-bold">Оценка</p>
+                            <div id="report-score" class="text-6xl font-serif font-bold text-brand-gold mt-2">A</div>
+                            <p class="text-[11px] text-emerald-400 mt-2 font-medium" id="report-xp-reward">+150 XP начислено</p>
+                        </div>
+                        <!-- Report stats -->
+                        <div class="md:col-span-3 space-y-4">
+                            <div>
+                                <h4 class="text-sm font-bold text-white mb-1">Резюме диалога:</h4>
+                                <p id="report-summary" class="text-xs text-slate-300 leading-relaxed">Клиент согласился встретиться. Стажер грамотно перевел фокус с обсуждения комиссии на защиту финансовой чистоты сделки.</p>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="bg-slate-900/45 p-3 rounded border border-slate-800">
+                                    <h5 class="text-xs font-bold text-green-400 flex items-center gap-1"><i class="fa-solid fa-thumbs-up"></i> Сильные стороны:</h5>
+                                    <ul id="report-strengths" class="text-[11px] text-slate-300 mt-1 list-disc list-inside space-y-1">
+                                        <li>Быстрый уход от прямого спора о цене</li>
+                                        <li>Использована техника "согласие + перехват"</li>
+                                    </ul>
+                                </div>
+                                <div class="bg-slate-900/45 p-3 rounded border border-slate-800">
+                                    <h5 class="text-xs font-bold text-red-400 flex items-center gap-1"><i class="fa-solid fa-triangle-exclamation"></i> Зоны роста:</h5>
+                                    <ul id="report-weaknesses" class="text-[11px] text-slate-300 mt-1 list-disc list-inside space-y-1">
+                                        <li>Мягче закрывать на встречу</li>
+                                        <li>Не оправдываться за тарифы регламента</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 4: PROPERTY ANALYZER -->
+            <section id="tab-analyzer" class="hidden space-y-8">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                        <h1 class="text-2xl font-serif font-bold text-white">Интеллектуальный AI-Анализ Объекта</h1>
+                        <p class="text-slate-400 text-sm mt-1">Введите параметры продаваемой квартиры, и модель сгенерирует маркетинговую воронку, сильные стороны и продающий питч.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- Input parameters form -->
+                    <div class="glass-panel rounded-xl p-6 h-fit space-y-4">
+                        <h3 class="font-serif text-lg font-bold text-white border-b border-slate-800 pb-3">Параметры объекта</h3>
+                        
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Название ЖК / Адрес:</label>
+                            <input id="prop-address" type="text" placeholder="ЖК 'Панорама', ул. Ленина 15, кв. 82" class="w-full bg-slate-800 border border-slate-700 rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-brand-gold">
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Цена (руб):</label>
+                                <input id="prop-price" type="text" placeholder="12 500 000" class="w-full bg-slate-800 border border-slate-700 rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-brand-gold">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Площадь (м²):</label>
+                                <input id="prop-area" type="text" placeholder="64" class="w-full bg-slate-800 border border-slate-700 rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-brand-gold">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Основные фишки объекта:</label>
+                            <textarea id="prop-features" rows="4" placeholder="Панорамные окна на реку, закрытый двор без машин, предчистовая отделка white box, 5 минут до метро пешком" class="w-full bg-slate-800 border border-slate-700 rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-brand-gold"></textarea>
+                        </div>
+
+                        <button onclick="analyzeProperty()" class="w-full bg-brand-gold text-brand-dark font-bold py-3 rounded-lg text-sm hover:bg-brand-goldDark transition flex items-center justify-center gap-2">
+                            <span id="analyzer-loader" class="hidden"><i class="fa-solid fa-spinner animate-spin"></i></span>
+                            <i class="fa-solid fa-magnifying-glass-chart"></i> Запустить AI Анализ
+                        </button>
+                    </div>
+
+                    <!-- Analysis results space -->
+                    <div class="lg:col-span-2 glass-panel rounded-xl p-6 h-fit min-h-[450px] flex flex-col justify-between">
+                        <div id="analyzer-placeholder" class="my-auto text-center py-20 text-slate-500">
+                            <i class="fa-solid fa-chart-line text-5xl text-slate-700 block mb-4"></i>
+                            Заполните параметры квартиры слева и запустите анализ
+                        </div>
+
+                        <div id="analyzer-results" class="hidden space-y-6">
+                            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                                <h3 class="font-serif text-xl font-bold text-white text-gold-gradient">Результаты анализа</h3>
+                                <button onclick="copyToClipboard('analyzer-results-text')" class="text-xs bg-slate-800 hover:bg-slate-700 text-brand-gold border border-brand-gold/30 px-3 py-1.5 rounded transition flex items-center gap-1">
+                                    <i class="fa-regular fa-copy"></i> Скопировать весь текст
+                                </button>
+                            </div>
+
+                            <div id="analyzer-results-text" class="space-y-4 text-xs text-slate-300 leading-relaxed">
+                                <!-- Pro/Con list -->
+                                <div class="bg-slate-900/40 p-4 rounded border border-slate-800 space-y-2">
+                                    <h4 class="font-bold text-white text-sm"><i class="fa-solid fa-scale-balanced text-brand-gold"></i> Плюсы и минусы для переговоров:</h4>
+                                    <div id="ai-pros-cons" class="whitespace-pre-wrap">Идет загрузка...</div>
+                                </div>
+
+                                <!-- Pitch -->
+                                <div class="bg-[#111c34]/50 p-4 rounded border border-brand-gold/20 space-y-2">
+                                    <h4 class="font-bold text-brand-gold text-sm"><i class="fa-solid fa-headset"></i> Профессиональный Elevator Pitch брокера:</h4>
+                                    <p id="ai-elevator-pitch" class="italic">Идет загрузка...</p>
+                                </div>
+
+                                <!-- Social post -->
+                                <div class="bg-slate-900/40 p-4 rounded border border-slate-800 space-y-2">
+                                    <h4 class="font-bold text-white text-sm"><i class="fa-solid fa-hashtag text-brand-gold"></i> Готовый продающий пост для соцсетей:</h4>
+                                    <div id="ai-social-post" class="whitespace-pre-wrap">Идет загрузка...</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 5: AI ASSISTANT -->
+            <section id="tab-assistant" class="hidden space-y-8">
+                <div class="flex items-center gap-4">
+                    <div>
+                        <h1 class="text-2xl font-serif font-bold text-white">AI Помощник Сити Старт</h1>
+                        <p class="text-slate-400 text-sm mt-1">Спросите AI-Ассистента о любых регламентах компании, типах ипотеки, налогах или стандартах ведения сделок.</p>
+                    </div>
+                </div>
+
+                <div class="glass-panel rounded-xl h-[600px] flex flex-col justify-between overflow-hidden">
+                    <!-- Chat container top bar -->
+                    <div class="p-4 bg-slate-900 border-b border-slate-800 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <span class="w-2.5 h-2.5 rounded-full bg-green-500 inline-block animate-ping"></span>
+                            <span class="text-xs text-slate-300 font-semibold">База знаний «Сити Старт» загружена в контекст</span>
+                        </div>
+                        <button onclick="clearAssistantChat()" class="text-xs text-slate-400 hover:text-white transition"><i class="fa-solid fa-trash-can"></i> Очистить историю</button>
+                    </div>
+
+                    <!-- Chat Messages list -->
+                    <div id="assistant-messages" class="flex-1 p-6 overflow-y-auto space-y-4 bg-slate-900/30">
+                        <div class="flex gap-4">
+                            <div class="w-9 h-9 rounded-lg bg-brand-gold/10 text-brand-gold flex items-center justify-center font-bold text-sm shrink-0">🤖</div>
+                            <div class="bg-slate-800/65 rounded-lg p-4 text-xs max-w-2xl leading-relaxed text-slate-200">
+                                Привет! Я твой виртуальный напарник-наставник Сити Старт. Спроси меня, например, о том:
+                                <ul class="list-disc list-inside mt-2 space-y-1 text-slate-400">
+                                    <li>Каковы этапы проверки юридической чистоты квартиры на вторичке?</li>
+                                    <li>Как правильно отработать возражение "Я подумаю"?</li>
+                                    <li>Как работает система начисления баллов XP в Сити Старт?</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bottom message input bar -->
+                    <div class="p-4 bg-slate-900 border-t border-slate-800 flex items-center gap-3">
+                        <input id="assistant-input" type="text" placeholder="Задайте ваш профессиональный вопрос..." class="flex-1 bg-slate-800 border border-slate-700 rounded-lg px-4 py-3.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-brand-gold" onkeydown="if(event.key === 'Enter') sendAssistantMessage()">
+                        <button onclick="sendAssistantMessage()" class="p-3.5 bg-brand-gold hover:bg-brand-goldDark text-brand-dark rounded-lg font-bold transition">
+                            <i class="fa-solid fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 6: LEADERBOARD -->
+            <section id="tab-leaderboard" class="hidden space-y-8">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h1 class="text-2xl font-serif font-bold text-white">Таблица лидеров стажеров</h1>
+                        <p class="text-slate-400 text-sm mt-1">Соревнуйтесь с коллегами вашего потока. Лучший брокер по итогам месяца получит приоритет на VIP-лидов.</p>
+                    </div>
+                </div>
+
+                <!-- Leaderboard Grid list -->
+                <div class="glass-panel rounded-xl overflow-hidden border border-slate-800">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-900/80 border-b border-slate-800 text-[11px] uppercase text-slate-400 font-bold">
+                                <th class="p-5">Место</th>
+                                <th class="p-5">ФИО Брокера</th>
+                                <th class="p-5">Уровень</th>
+                                <th class="p-5">Выполнено тестов</th>
+                                <th class="p-5">AI Симуляции</th>
+                                <th class="p-5 text-right">Набрано XP</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-800/60 text-xs">
+                            <tr class="hover:bg-slate-800/10 transition-all">
+                                <td class="p-5 font-bold text-yellow-400 text-sm">🥇 1</td>
+                                <td class="p-5 font-bold text-white flex items-center gap-2">
+                                    <img class="w-7 h-7 rounded-full object-cover" src="https://placehold.co/100x100/1e293b/c5a880?text=АВ" alt="Александр">
+                                    Александр Воронцов
+                                </td>
+                                <td class="p-5 text-brand-gold font-medium">Уровень 3</td>
+                                <td class="p-5 text-slate-300">18 / 18</td>
+                                <td class="p-5 text-slate-300">5 / 5</td>
+                                <td class="p-5 text-right font-bold text-yellow-400">4200 XP</td>
+                            </tr>
+
+                            <tr class="hover:bg-slate-800/10 transition-all">
+                                <td class="p-5 font-bold text-slate-300 text-sm">🥈 2</td>
+                                <td class="p-5 font-bold text-white flex items-center gap-2">
+                                    <img class="w-7 h-7 rounded-full object-cover" src="https://placehold.co/100x100/1e293b/c5a880?text=МК" alt="Мария">
+                                    Мария Ковальчук
+                                </td>
+                                <td class="p-5 text-brand-gold font-medium">Уровень 3</td>
+                                <td class="p-5 text-slate-300">16 / 18</td>
+                                <td class="p-5 text-slate-300">5 / 5</td>
+                                <td class="p-5 text-right font-bold text-slate-300">3850 XP</td>
+                            </tr>
+
+                            <tr class="hover:bg-slate-800/10 transition-all">
+                                <td class="p-5 font-bold text-orange-400 text-sm">🥉 3</td>
+                                <td class="p-5 font-bold text-white flex items-center gap-2">
+                                    <img class="w-7 h-7 rounded-full object-cover" src="https://placehold.co/100x100/1e293b/c5a880?text=НД" alt="Никита">
+                                    Никита Давыдов
+                                </td>
+                                <td class="p-5 text-brand-gold font-medium">Уровень 2</td>
+                                <td class="p-5 text-slate-300">14 / 18</td>
+                                <td class="p-5 text-slate-300">4 / 5</td>
+                                <td class="p-5 text-right font-bold text-orange-400">3400 XP</td>
+                            </tr>
+
+                            <!-- Current Student -->
+                            <tr class="bg-brand-gold/5 border-y border-brand-gold/20">
+                                <td class="p-5 font-bold text-brand-gold text-sm" id="leaderboard-pos">#4</td>
+                                <td class="p-5 font-bold text-white flex items-center gap-2">
+                                    <img id="leaderboard-avatar" class="w-7 h-7 rounded-full object-cover border border-brand-gold" src="https://placehold.co/150x150/1e293b/c5a880?text=Брокер" alt="Вы">
+                                    Никита Лебедев (Вы)
+                                </td>
+                                <td class="p-5 text-brand-gold font-medium">Уровень 2</td>
+                                <td class="p-5 text-slate-300">12 / 18</td>
+                                <td class="p-5 text-slate-300" id="leaderboard-sims">4 / 5</td>
+                                <td class="p-5 text-right font-bold text-brand-gold" id="leaderboard-xp">3200 XP</td>
+                            </tr>
+
+                            <tr class="hover:bg-slate-800/10 transition-all opacity-75">
+                                <td class="p-5 font-bold text-slate-500 text-sm">5</td>
+                                <td class="p-5 font-bold text-slate-400 flex items-center gap-2">
+                                    <img class="w-7 h-7 rounded-full object-cover" src="https://placehold.co/100x100/1e293b/c5a880?text=ЕС" alt="Елена">
+                                    Елена Смирнова
+                                </td>
+                                <td class="p-5 text-slate-500">Уровень 2</td>
+                                <td class="p-5 text-slate-500">10 / 18</td>
+                                <td class="p-5 text-slate-500">2 / 5</td>
+                                <td class="p-5 text-right font-bold text-slate-400">2950 XP</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- TAB 7: SUPERVISOR DASHBOARD -->
+            <section id="tab-supervisor" class="hidden space-y-8">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h1 class="text-2xl font-serif font-bold text-white">Панель управления наставника</h1>
+                        <p class="text-slate-400 text-sm mt-1">Оценивайте прогресс подопечных, слушайте записи AI-звонков и вмешивайтесь при низких баллах.</p>
+                    </div>
+                </div>
+
+                <!-- Supervisor core table of students -->
+                <div class="glass-panel rounded-xl overflow-hidden border border-slate-800">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-900/80 border-b border-slate-800 text-[11px] uppercase text-slate-400 font-bold">
+                                <th class="p-5">ФИО Стажера</th>
+                                <th class="p-5">Текущий модуль</th>
+                                <th class="p-5">Ср. балл за тесты</th>
+                                <th class="p-5">AI Симуляции</th>
+                                <th class="p-5">Статус риска</th>
+                                <th class="p-5 text-right">Решение</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-800/60 text-xs">
+                            <tr class="hover:bg-slate-800/10 transition-all">
+                                <td class="p-5 font-bold text-white flex items-center gap-2">
+                                    <img class="w-8 h-8 rounded-full object-cover" src="https://placehold.co/100x100/1e293b/c5a880?text=АВ" alt="Александр">
+                                    Александр Воронцов
+                                </td>
+                                <td class="p-5 text-slate-300">Модуль 3: Вторичная</td>
+                                <td class="p-5 text-emerald-400 font-bold">94%</td>
+                                <td class="p-5 text-slate-400">5 сдано (Средняя А)</td>
+                                <td class="p-5"><span class="bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded text-[10px] font-bold uppercase">В лидерах</span></td>
+                                <td class="p-5 text-right"><button class="bg-slate-800 text-xs text-brand-gold px-3 py-1.5 rounded hover:bg-slate-700 transition">Досье</button></td>
+                            </tr>
+
+                            <tr class="hover:bg-slate-800/10 transition-all">
+                                <td class="p-5 font-bold text-white flex items-center gap-2">
+                                    <img class="w-8 h-8 rounded-full object-cover border border-brand-gold" src="https://placehold.co/150x150/1e293b/c5a880?text=Брокер" alt="Никита">
+                                    Никита Лебедев (Вы)
+                                </td>
+                                <td class="p-5 text-slate-300">Модуль 3: Вторичная</td>
+                                <td class="p-5 text-emerald-400 font-bold">92%</td>
+                                <td class="p-5 text-slate-400">4 сдано (Средняя B+)</td>
+                                <td class="p-5"><span class="bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded text-[10px] font-bold uppercase">В норме</span></td>
+                                <td class="p-5 text-right"><button class="bg-slate-800 text-xs text-brand-gold px-3 py-1.5 rounded hover:bg-slate-700 transition">Досье</button></td>
+                            </tr>
+
+                            <tr class="hover:bg-slate-800/10 transition-all">
+                                <td class="p-5 font-bold text-white flex items-center gap-2">
+                                    <img class="w-8 h-8 rounded-full object-cover" src="https://placehold.co/100x100/1e293b/c5a880?text=ИС" alt="Игорь">
+                                    Игорь Соколов
+                                </td>
+                                <td class="p-5 text-slate-300">Модуль 2: Новостройки</td>
+                                <td class="p-5 text-red-400 font-bold">62%</td>
+                                <td class="p-5 text-slate-400">1 сдано (Средняя D)</td>
+                                <td class="p-5"><span class="bg-red-500/10 text-red-400 px-2 py-0.5 rounded text-[10px] font-bold uppercase animate-pulse">Критично / Отсев</span></td>
+                                <td class="p-5 text-right"><button class="bg-red-500 text-xs text-white px-3 py-1.5 rounded hover:bg-red-600 transition">Вмешаться</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- JAVASCRIPT APP STATE & GEMINI INTEGRATIONS -->
+    <script>
+        // Global variables state
+        let currentXP = 3200;
+        let selectedPersonaKey = 'skeptic';
+        let conversationHistory = [];
+        let simulationActive = false;
+        let generatedClientPrompt = "";
+
+        // Client profile definitions
+        const personas = {
+            skeptic: {
+                name: 'Игорь (Скептик)',
+                difficulty: 'Высокая',
+                desc: 'Ненавидит агентства. Продает 2-к квартиру.',
+                systemPrompt: 'Ты - Игорь, упрямый и недоверчивый собственник квартиры. Твоя цель - продать квартиру самостоятельно, не выплачивая комиссию риелтору. Ты считаешь все риелторов "паразитами". Стажер-риелтор звонит тебе. Твои ответы должны быть короткими, жесткими, циничными. Не соглашайся на встречу легко. Если стажер приведет веские аргументы по безопасности сделки или показу реальных клиентов - начни колебаться.',
+                openingObjection: 'Слушайте, давайте сразу договоримся: риелторы мне не нужны. Комиссию я платить не собираюсь. Будет покупатель — ведите, нет — не тратьте мое время. Зачем мне вы?'
+            },
+            investor: {
+                name: 'Мария (Инвестор)',
+                difficulty: 'Средняя',
+                desc: 'Ищет студию под аренду в новостройке.',
+                systemPrompt: 'Ты - Мария, прагматичный инвестор. Ты ценишь сухие цифры, окупаемость и надежность девелопера. Ты сомневаешься в ликвидности предложенного риелтором ЖК. Говори профессионально, спрашивай про ROI, про цену за квадратный метр и динамику сдачи. Если стажер покажет расчеты - ты готова обсудить.',
+                openingObjection: 'Я изучила этот ЖК. Цены сейчас на пике, а застройщик задерживал прошлые сдачи. Какая у меня реальная доходность после налогов и управления? Почему я должна инвестировать именно сюда?'
+            },
+            family: {
+                name: 'Евгений (Молодая семья)',
+                difficulty: 'Легкая',
+                desc: 'Ищет просторную семейную квартиру.',
+                systemPrompt: 'Ты - Евгений, заботливый отец. Вы с женой боитесь ипотечного рабства и ищете безопасный вариант для детей. Вы колеблетесь между новостройкой (которую надо ждать) и старым обжитым районом.',
+                openingObjection: 'Мы очень боимся ввязываться в долгострой. А вдруг стройка заморозится и мы останемся на улице с ребенком и ипотекой? Безопасно ли сейчас брать эскроу-счета?'
+            }
+        };
+
+        // Navigation state controller
+        function switchTab(tabId) {
+            // Hide all tabs
+            document.querySelectorAll('#content-container > section').forEach(tab => tab.classList.add('hidden'));
+            // Show selected tab
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+
+            // Reset active style on sidebar buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('text-white', 'bg-slate-800/45', 'border-l-2', 'border-brand-gold');
+                btn.classList.add('text-slate-400', 'hover:text-white', 'hover:bg-slate-800/30');
+            });
+
+            // Set active state on button
+            const activeBtn = document.getElementById(`nav-${tabId}`);
+            if (activeBtn) {
+                activeBtn.classList.remove('text-slate-400', 'hover:text-white', 'hover:bg-slate-800/30');
+                activeBtn.classList.add('text-white', 'bg-slate-800/45', 'border-l-2', 'border-brand-gold');
+            }
+
+            // Update title
+            const titles = {
+                dashboard: 'Личный кабинет стажера',
+                courses: 'Обучающий блок Академии',
+                simulator: 'Интерактивный AI Симулятор Звонков',
+                analyzer: 'Интеллектуальный AI-Анализ Объекта',
+                assistant: 'AI Помощник Сити Старт',
+                leaderboard: 'Таблица лидеров стажеров',
+                supervisor: 'Панель управления наставника'
+            };
+            document.getElementById('page-title').innerText = titles[tabId];
+        }
+
+        function toggleLessons(id) {
+            const el = document.getElementById(id);
+            if (el.classList.contains('hidden')) {
+                el.classList.remove('hidden');
+            } else {
+                el.classList.add('hidden');
+            }
+        }
+
+        // Complete daily task helper
+        function completeTask(taskId, xpVal) {
+            const chk = document.getElementById(taskId);
+            if (chk.checked) {
+                currentXP += xpVal;
+                updateXPUI();
+                showNotification(`Вы выполнили задачу! Получено +${xpVal} XP`);
+                chk.disabled = true;
+            }
+        }
+
+        function updateXPUI() {
+            document.getElementById('xp-counter').innerText = `64% (${currentXP} XP)`;
+            document.getElementById('leaderboard-xp').innerText = `${currentXP} XP`;
+            // Redraw progress line
+            const percentage = Math.min(100, Math.floor((currentXP / 5000) * 100));
+            document.getElementById('xp-progress-bar').style.width = `${percentage}%`;
+        }
+
+        function showNotification(text) {
+            const notif = document.createElement('div');
+            notif.className = 'fixed bottom-5 right-5 bg-slate-900 border border-brand-gold text-slate-100 px-6 py-4 rounded-xl shadow-2xl z-50 flex items-center gap-3 animate-bounce';
+            notif.innerHTML = `<i class="fa-solid fa-circle-check text-brand-gold text-xl"></i> <div><h5 class="font-bold text-xs text-white">Уведомление системы</h5><p class="text-[11px] text-slate-400">${text}</p></div>`;
+            document.body.appendChild(notif);
+            setTimeout(() => notif.remove(), 4000);
+        }
+
+        // Gemini API configuration
+        const apiKey = ""; // Left empty as per Canvas requirements (runtime injections enabled)
+        
+        async function callGemini(userPrompt, systemInstruction = "") {
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+            
+            const payload = {
+                contents: [{ parts: [{ text: userPrompt }] }],
+                systemInstruction: systemInstruction ? {
+                    parts: [{ text: systemInstruction }]
+                } : undefined,
+            };
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`API HTTP error! status: ${response.status}`);
+                }
+
+                const result = await response.json();
+                return result.candidates?.[0]?.content?.parts?.[0]?.text || "Ошибка генерации";
+            } catch (error) {
+                console.error("Gemini API error:", error);
+                return "Извините, сейчас сервер Сити Старт перегружен. Пожалуйста, попробуйте написать аргумент еще раз через пару секунд.";
+            }
+        }
+
+        // Persona select
+        function selectPersona(key) {
+            selectedPersonaKey = key;
+            // Update ui selection outline
+            document.querySelectorAll('#tab-simulator .p-4').forEach(card => {
+                if(card.id.startsWith('persona-')) {
+                    card.classList.remove('border-brand-gold/60', 'bg-slate-800/40');
+                    card.classList.add('border-slate-800', 'bg-slate-800/20');
+                }
+            });
+            document.getElementById(`persona-${key}`).classList.remove('border-slate-800', 'bg-slate-800/20');
+            document.getElementById(`persona-${key}`).classList.add('border-brand-gold/60', 'bg-slate-800/40');
+
+            // Update simulator header
+            document.getElementById('sim-client-name').innerText = personas[key].name;
+            
+            // Clean avatar container if generation wasn't triggered
+            document.getElementById('active-sim-avatar').src = "https://placehold.co/100x100/1e293b/c5a880?text=👤";
+            document.getElementById('avatar-preview-container').classList.add('hidden');
+        }
+
+        // Start call simulation
+        function startSim() {
+            simulationActive = true;
+            conversationHistory = [];
+            const client = personas[selectedPersonaKey];
+            
+            // Enable Inputs
+            document.getElementById('sim-input').disabled = false;
+            document.getElementById('btn-send-sim').disabled = false;
+            document.getElementById('btn-evaluate').classList.remove('hidden');
+
+            const container = document.getElementById('sim-messages');
+            container.innerHTML = `
+                <div class="text-center text-[11px] text-slate-500 py-2 border-b border-slate-800/40">
+                    <i class="fa-solid fa-phone-flip text-green-400"></i> Гудки... Звонок соединен с Игорем
+                </div>
+                <div class="flex gap-4">
+                    <div class="w-9 h-9 rounded-full bg-slate-800 flex items-center justify-center shrink-0">👤</div>
+                    <div class="bg-slate-800 rounded-lg p-3 text-xs max-w-xl text-slate-100 font-medium">
+                        ${client.openingObjection}
+                    </div>
+                </div>
+            `;
+
+            conversationHistory.push({ role: 'client', text: client.openingObjection });
+        }
+
+        // Send simulation response
+        async function sendSimMessage() {
+            if (!simulationActive) return;
+            const input = document.getElementById('sim-input');
+            const text = input.value.trim();
+            if (!text) return;
+
+            input.value = "";
+            const container = document.getElementById('sim-messages');
+
+            // Render Broker response
+            container.innerHTML += `
+                <div class="flex gap-4 justify-end">
+                    <div class="bg-[#111c34] border border-brand-gold/20 rounded-lg p-3 text-xs max-w-xl text-slate-200">
+                        ${text}
+                    </div>
+                    <div class="w-9 h-9 rounded-full bg-brand-gold/10 text-brand-gold flex items-center justify-center shrink-0 font-bold text-xs border border-brand-gold/30">Вы</div>
+                </div>
+            `;
+            container.scrollTop = container.scrollHeight;
+
+            conversationHistory.push({ role: 'broker', text: text });
+
+            // Show loading animation for Client
+            const loadingId = 'client-loading-' + Date.now();
+            container.innerHTML += `
+                <div id="${loadingId}" class="flex gap-4">
+                    <div class="w-9 h-9 rounded-full bg-slate-800 flex items-center justify-center shrink-0">👤</div>
+                    <div class="bg-slate-800 rounded-lg p-3 text-xs text-slate-400 flex items-center gap-1.5">
+                        <i class="fa-solid fa-ellipsis animate-pulse"></i> Клиент думает...
+                    </div>
+                </div>
+            `;
+            container.scrollTop = container.scrollHeight;
+
+            // Prepare prompt for model
+            const client = personas[selectedPersonaKey];
+            let dialogHistoryString = conversationHistory.map(turn => `${turn.role === 'client' ? 'Клиент' : 'Риелтор'}: ${turn.text}`).join('\n');
+            
+            const clientResponseText = await callGemini(
+                `Продолжи диалог как Клиент. Прочитай историю разговора ниже:\n\n${dialogHistoryString}\n\nНапиши только ответную реплику Клиента.`,
+                client.systemPrompt
+            );
+
+            // Remove loader
+            document.getElementById(loadingId).remove();
+
+            // Render client response
+            container.innerHTML += `
+                <div class="flex gap-4">
+                    <div class="w-9 h-9 rounded-full bg-slate-800 flex items-center justify-center shrink-0">👤</div>
+                    <div class="bg-slate-800 rounded-lg p-3 text-xs max-w-xl text-slate-100 font-medium">
+                        ${clientResponseText}
+                    </div>
+                </div>
+            `;
+            container.scrollTop = container.scrollHeight;
+            conversationHistory.push({ role: 'client', text: clientResponseText });
+        }
+
+        // Evaluate whole simulation dialogue with AI grading
+        async function evaluateSimulation() {
+            if (!simulationActive || conversationHistory.length < 2) return;
+            
+            // Lock simulator inputs
+            simulationActive = false;
+            document.getElementById('sim-input').disabled = true;
+            document.getElementById('btn-send-sim').disabled = true;
+            document.getElementById('btn-evaluate').classList.add('hidden');
+
+            const container = document.getElementById('sim-messages');
+            container.innerHTML += `
+                <div class="text-center text-xs text-slate-400 py-4 bg-slate-900/60 rounded border border-slate-800">
+                    <i class="fa-solid fa-microchip animate-spin text-brand-gold mr-1.5"></i> Наставник-AI анализирует запись разговора...
+                </div>
+            `;
+            container.scrollTop = container.scrollHeight;
+
+            let dialogue = conversationHistory.map(turn => `${turn.role === 'client' ? 'Клиент' : 'Риелтор'}: ${turn.text}`).join('\n');
+            
+            const systemEvaluationPrompt = `Ты - опытный наставник по продажам недвижимости в компании "Сити Старт". Проанализируй этот диалог риелтора с клиентом:
+            
+            ${dialogue}
+            
+            Дай структурированный анализ в формате JSON со следующими полями:
+            - grade: Оценка (A, B, C, D или F)
+            - summary: Краткое резюме звонка (1-2 предложения)
+            - strengths: Массив сильных сторон брокера (2-3 пункта)
+            - weaknesses: Массив точек роста и ошибок (2-3 пункта)
+            - rewardedXp: Количество начисленных XP за сложность диалога (число, например 150)
+            
+            Формат JSON должен быть чистым.`;
+
+            // Setup payload for structured response
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+            const payload = {
+                contents: [{ parts: [{ text: "Проанализируй диалог." }] }],
+                generationConfig: {
+                    responseMimeType: "application/json",
+                    responseSchema: {
+                        type: "OBJECT",
+                        properties: {
+                            grade: { type: "STRING" },
+                            summary: { type: "STRING" },
+                            strengths: { type: "ARRAY", items: { type: "STRING" } },
+                            weaknesses: { type: "ARRAY", items: { type: "STRING" } },
+                            rewardedXp: { type: "NUMBER" }
+                        },
+                        required: ["grade", "summary", "strengths", "weaknesses", "rewardedXp"]
+                    }
+                },
+                systemInstruction: {
+                    parts: [{ text: systemEvaluationPrompt }]
+                }
+            };
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                
+                const result = await response.json();
+                const textResult = result.candidates?.[0]?.content?.parts?.[0]?.text;
+                const parsed = JSON.parse(textResult);
+
+                // Render UI Report Card
+                document.getElementById('report-score').innerText = parsed.grade;
+                document.getElementById('report-summary').innerText = parsed.summary;
+                document.getElementById('report-xp-reward').innerText = `+${parsed.rewardedXp} XP начислено`;
+
+                // Update strengths
+                const strList = document.getElementById('report-strengths');
+                strList.innerHTML = "";
+                parsed.strengths.forEach(st => {
+                    strList.innerHTML += `<li>${st}</li>`;
+                });
+
+                // Update weaknesses
+                const wkList = document.getElementById('report-weaknesses');
+                wkList.innerHTML = "";
+                parsed.weaknesses.forEach(wk => {
+                    wkList.innerHTML += `<li>${wk}</li>`;
+                });
+
+                // Show Report
+                document.getElementById('sim-report-card').classList.remove('hidden');
+                document.getElementById('sim-report-card').scrollIntoView({ behavior: 'smooth' });
+
+                // Reward XP
+                currentXP += parsed.rewardedXp;
+                updateXPUI();
+                showNotification(`AI Звонок оценен: ${parsed.grade}! Получено +${parsed.rewardedXp} XP`);
+
+            } catch (error) {
+                console.error("Evaluation generation failed:", error);
+                showNotification("Ошибка анализа звонка. Попробуйте перезапустить симулятор.");
+            }
+        }
+
+        // Image generation logic using Imagen 4
+        async function generateClientAvatar() {
+            const loader = document.getElementById('avatar-loader');
+            const btn = document.getElementById('btn-generate-avatar');
+            loader.classList.remove('hidden');
+            btn.disabled = true;
+
+            const client = personas[selectedPersonaKey];
+            const prompt = `Professional profile portrait photo of a real estate client named ${client.name}, middle-aged, neutral corporate background, photographic style, soft illumination, high details.`;
+
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-generate-001:predict?key=${apiKey}`;
+            const payload = {
+                instances: { prompt: prompt },
+                parameters: { "sampleCount": 1 }
+            };
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const result = await response.json();
+                
+                if (result.predictions && result.predictions[0]?.bytesBase64Encoded) {
+                    const imageUrl = `data:image/png;base64,${result.predictions[0].bytesBase64Encoded}`;
+                    
+                    // Show in preview
+                    document.getElementById('generated-avatar-img').src = imageUrl;
+                    document.getElementById('avatar-preview-container').classList.remove('hidden');
+                    
+                    // Inject into simulator active slot
+                    document.getElementById('active-sim-avatar').src = imageUrl;
+                    document.getElementById('student-avatar').src = imageUrl; // Dynamic client profile view
+                    document.getElementById('leaderboard-avatar').src = imageUrl;
+                    
+                    showNotification("Портрет клиента успешно сгенерирован!");
+                } else {
+                    showNotification("Не удалось сгенерировать портрет. Попробуем в следующий раз.");
+                }
+            } catch (err) {
+                console.error("Imagen failed:", err);
+                showNotification("Внутренняя ошибка сервиса визуализации.");
+            } finally {
+                loader.classList.add('hidden');
+                btn.disabled = false;
+            }
+        }
+
+        // Property Analyzer module
+        async function analyzeProperty() {
+            const address = document.getElementById('prop-address').value.trim();
+            const price = document.getElementById('prop-price').value.trim();
+            const area = document.getElementById('prop-area').value.trim();
+            const features = document.getElementById('prop-features').value.trim();
+
+            if (!address || !price || !area) {
+                showNotification("Пожалуйста, заполните основные поля квартиры!");
+                return;
+            }
+
+            document.getElementById('analyzer-loader').classList.remove('hidden');
+            document.getElementById('analyzer-placeholder').classList.add('hidden');
+            document.getElementById('analyzer-results').classList.add('hidden');
+
+            const systemPrompt = `Ты — эксперт-аналитик по недвижимости Сити Старт. Твоя задача — составить подробный профессиональный разбор квартиры по переданным параметрам в формате JSON.
+            
+            Параметры:
+            Адрес: ${address}
+            Цена: ${price} руб.
+            Площадь: ${area} м²
+            Фишки: ${features}
+            
+            Выдай ответ строго в формате JSON со следующими полями:
+            - prosCons: Текст, описывающий плюсы и минусы объекта для телефонных переговоров.
+            - pitch: Текст "Elevator pitch" для продажи объекта за 30 секунд.
+            - socialPost: Текст продающего поста для Телеграм-канала с хэштегами и эмодзи.`;
+
+            // Structured JSON return request
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+            const payload = {
+                contents: [{ parts: [{ text: "Анализируй объект" }] }],
+                generationConfig: {
+                    responseMimeType: "application/json",
+                    responseSchema: {
+                        type: "OBJECT",
+                        properties: {
+                            prosCons: { type: "STRING" },
+                            pitch: { type: "STRING" },
+                            socialPost: { type: "STRING" }
+                        },
+                        required: ["prosCons", "pitch", "socialPost"]
+                    }
+                },
+                systemInstruction: {
+                    parts: [{ text: systemPrompt }]
+                }
+            };
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                
+                const result = await response.json();
+                const jsonText = result.candidates?.[0]?.content?.parts?.[0]?.text;
+                const parsed = JSON.parse(jsonText);
+
+                // Populate fields
+                document.getElementById('ai-pros-cons').innerText = parsed.prosCons;
+                document.getElementById('ai-elevator-pitch').innerText = parsed.pitch;
+                document.getElementById('ai-social-post').innerText = parsed.socialPost;
+
+                document.getElementById('analyzer-results').classList.remove('hidden');
+                showNotification("AI-Анализ объекта успешно завершен! Получено +100 XP.");
+                currentXP += 100;
+                updateXPUI();
+
+            } catch (error) {
+                console.error("Analyzer failed:", error);
+                showNotification("Сервис анализа временно перегружен.");
+            } finally {
+                document.getElementById('analyzer-loader').classList.add('hidden');
+            }
+        }
+
+        // AI Assistant chat logic
+        async function sendAssistantMessage() {
+            const input = document.getElementById('assistant-input');
+            const text = input.value.trim();
+            if (!text) return;
+
+            input.value = "";
+            const box = document.getElementById('assistant-messages');
+
+            // Render User Turn
+            box.innerHTML += `
+                <div class="flex gap-4 justify-end">
+                    <div class="bg-[#111c34] border border-brand-gold/20 rounded-lg p-4 text-xs max-w-2xl text-slate-200">
+                        ${text}
+                    </div>
+                    <div class="w-9 h-9 rounded-full bg-brand-gold/10 text-brand-gold flex items-center justify-center shrink-0 font-bold text-xs border border-brand-gold/30">Вы</div>
+                </div>
+            `;
+            box.scrollTop = box.scrollHeight;
+
+            // Render AI Loader
+            const loadingId = 'ass-loader-' + Date.now();
+            box.innerHTML += `
+                <div id="${loadingId}" class="flex gap-4">
+                    <div class="w-9 h-9 rounded-lg bg-brand-gold/10 text-brand-gold flex items-center justify-center font-bold text-sm shrink-0">🤖</div>
+                    <div class="bg-slate-800/65 rounded-lg p-4 text-xs text-slate-400 flex items-center gap-1.5">
+                        <i class="fa-solid fa-spinner animate-spin"></i> Поиск в регламентах компании...
+                    </div>
+                </div>
+            `;
+            box.scrollTop = box.scrollHeight;
+
+            const systemInstruction = `Ты — умный AI-Ассистент по внутреннему обучению компании недвижимости "Сити Старт".
+            Твоя цель — отвечать на любые юридические, экономические, технические или регламентные вопросы стажера-брокера.
+            Отвечай структурировано, профессионально, кратко, используй списки, пиши живым языком. Помогай стажеру быстрее выйти на сделку.`;
+
+            const reply = await callGemini(text, systemInstruction);
+
+            // Remove loading
+            document.getElementById(loadingId).remove();
+
+            // Render Response
+            box.innerHTML += `
+                <div class="flex gap-4">
+                    <div class="w-9 h-9 rounded-lg bg-brand-gold/10 text-brand-gold flex items-center justify-center font-bold text-sm shrink-0">🤖</div>
+                    <div class="bg-slate-800/65 rounded-lg p-4 text-xs max-w-2xl leading-relaxed text-slate-200">
+                        ${reply}
+                    </div>
+                </div>
+            `;
+            box.scrollTop = box.scrollHeight;
+        }
+
+        function clearAssistantChat() {
+            const box = document.getElementById('assistant-messages');
+            box.innerHTML = `
+                <div class="flex gap-4">
+                    <div class="w-9 h-9 rounded-lg bg-brand-gold/10 text-brand-gold flex items-center justify-center font-bold text-sm shrink-0">🤖</div>
+                    <div class="bg-slate-800/65 rounded-lg p-4 text-xs max-w-2xl leading-relaxed text-slate-200">
+                        История очищена. Задайте мне любой вопрос о стандартах агентства «Сити Старт» или проверке вторичного жилья!
+                    </div>
+                </div>
+            `;
+        }
+
+        // Copy utility
+        function copyToClipboard(elementId) {
+            const text = document.getElementById(elementId).innerText;
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            showNotification("Текст успешно скопирован в буфер обмена!");
+        }
+
+        // Initialize state defaults on window load
+        window.onload = function() {
+            selectPersona('skeptic');
+            updateXPUI();
+        }
+    </script>
+</body>
+</html>
